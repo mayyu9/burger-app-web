@@ -14,11 +14,14 @@ const controls= [
 const BuildControls = (props) => {
     return(
         <div className={classes.BuildControls}>
+             <p>Burger Price: <strong>{props.price.toFixed(2)} INR</strong></p>
             {controls.map(ing => {
                 return <BuildControl 
                     key={ing.label} 
                     label={ing.label}
                     added={() => props.ingredientAdd(ing.type)}
+                    sub = {() => props.ingredientSub(ing.type)}
+                    disabled = {props.disabled[ing.type]}
                     />
             })}
         </div>
