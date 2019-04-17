@@ -11,13 +11,20 @@ const Burger = (props) => {
     //             <BurgerIngredient key={i+1} type={igKey} />
     //         )
     //     })
-    
-    const transformedIngredients = Object.keys(props.ingredients)
+    /*this function converts an object to array and then loop on that array.
+    again looping on the same object to get the quantity given by user for a particular ingredient type.
+    Reduce- we are converting the complete single Array object, so that we can display user a message to add ingredients. */
+    let transformedIngredients = Object.keys(props.ingredients)
     .map( (igKey,i) => {
         return [...Array(props.ingredients[igKey])].map((_,i)=>{
             return  <BurgerIngredient key={igKey+i} type={igKey} />
         }); 
-    });
+    }).reduce((arr, el) => {
+            return arr.concat(el);
+        },[]);
+    if(transformedIngredients.length === 0){
+        transformedIngredients = <p>Please start adding ingredients</p>
+    }
 
     return(
         <div className={classes.Burger}>
