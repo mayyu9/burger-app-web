@@ -72,6 +72,10 @@ class BurgerBuilder extends React.Component{
     orderHandler = ()=>{
         this.setState({showModal:true});
     }
+
+    backDropHandler = () => {
+        this.setState({showModal:false});
+    }
     render(){
         const disableInfo = {...this.state.ingredients};
 
@@ -81,7 +85,7 @@ class BurgerBuilder extends React.Component{
 
         return(
             <Aux>
-                <Modal show={this.state.showModal}>
+                <Modal show={this.state.showModal} backDrop={this.backDropHandler}>
                     <OrderSummary ingredients={this.state.ingredients} />
                 </Modal>
                 <Burger ingredients= {this.state.ingredients} />
