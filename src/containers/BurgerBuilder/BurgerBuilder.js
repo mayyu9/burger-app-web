@@ -76,6 +76,10 @@ class BurgerBuilder extends React.Component{
     backDropHandler = () => {
         this.setState({showModal:false});
     }
+
+    continueHandler = () =>{
+        alert('you clicked continue');
+    }
     render(){
         const disableInfo = {...this.state.ingredients};
 
@@ -86,7 +90,12 @@ class BurgerBuilder extends React.Component{
         return(
             <Aux>
                 <Modal show={this.state.showModal} backDrop={this.backDropHandler}>
-                    <OrderSummary ingredients={this.state.ingredients} />
+                    <OrderSummary 
+                        ingredients={this.state.ingredients}
+                        cancelHandler={this.backDropHandler}
+                        continueHandler={this.continueHandler}
+                        price={this.state.totalPrice}
+                    />
                 </Modal>
                 <Burger ingredients= {this.state.ingredients} />
                 <BuildControls 
