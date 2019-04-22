@@ -17,61 +17,63 @@ const INGREDIENTS_PRICE = {
 
 class BurgerBuilder extends React.Component{
     state = {
-        ingredients: {
-            cheese: 0,
-            meat: 0,
-            salad: 0,
-            bacon: 0
-        },
+        ingredients: null,
         totalPrice: 20,
         purchasable: false,
         showModal:false,
         loading: false,
+        error: false,
      }
 
-     updatePurchasable = (ingredients) => {
-         const sum = Object.values(ingredients)
-                .reduce((sum, element) => {
-                    return sum + element;
-                }, 0);
-        this.setState({purchasable: sum > 0})
-     }
+    componentDidMount(){
+        axios.get('https://my-burger-app-83f21.firebaseio.com/ingredients.json')
+        .then(res => this.setState({ingredients: res.data}))
+        .catch(error => this.setState({error: true}))
+    }
 
-     addIngredientHandler = (type) => {
-         const prevCount = this.state.ingredients[type];
-         const updateCount =  prevCount + 1;
-         //create a copy of state object and then update the count.
-         const updateIngredients = {...this.state.ingredients};
-         updateIngredients[type] = updateCount;
+    updatePurchasable = (ingredients) => {
+        const sum = Object.values(ingredients)
+            .reduce((sum, element) => {
+                return sum + element;
+            }, 0);
+    this.setState({purchasable: sum > 0})
+    }
 
-         //calculate the price:
-
-         const oldPrice = this.state.totalPrice;
-         const priceAddition = INGREDIENTS_PRICE[type];
-         const newPrice = oldPrice + priceAddition;
-         this.setState({ingredients:updateIngredients, totalPrice:newPrice});
-         this.updatePurchasable(updateIngredients);
-     }
-
-     removeIngredientsHandler = (type) => {
+    addIngredientHandler = (type) => {
         const prevCount = this.state.ingredients[type];
-         //create a copy of state object and then update the count.
-         const updateIngredients = {...this.state.ingredients};
-         let updateCount;
-            if(prevCount > 0) { 
-                updateCount =  prevCount - 1;
-                updateIngredients[type] = updateCount;
-            }
-            else
-                return;
+        const updateCount =  prevCount + 1;
+        //create a copy of state object and then update the count.
+        const updateIngredients = {...this.state.ingredients};
+        updateIngredients[type] = updateCount;
 
-         //calculate the price:
-         const oldPrice = this.state.totalPrice;
-         const priceDeduction = INGREDIENTS_PRICE[type];
-         const newPrice = oldPrice - priceDeduction;
-         this.setState({ingredients:updateIngredients, totalPrice:newPrice});
-         this.updatePurchasable(updateIngredients);
-     }
+        //calculate the price:
+
+        const oldPrice = this.state.totalPrice;
+        const priceAddition = INGREDIENTS_PRICE[type];
+        const newPrice = oldPrice + priceAddition;
+        this.setState({ingredients:updateIngredients, totalPrice:newPrice});
+        this.updatePurchasable(updateIngredients);
+    }
+
+    removeIngredientsHandler = (type) => {
+    const prevCount = this.state.ingredients[type];
+        //create a copy of state object and then update the count.
+        const updateIngredients = {...this.state.ingredients};
+        let updateCount;
+        if(prevCount > 0) { 
+            updateCount =  prevCount - 1;
+            updateIngredients[type] = updateCount;
+        }
+        else
+            return;
+
+        //calculate the price:
+        const oldPrice = this.state.totalPrice;
+        const priceDeduction = INGREDIENTS_PRICE[type];
+        const newPrice = oldPrice - priceDeduction;
+        this.setState({ingredients:updateIngredients, totalPrice:newPrice});
+        this.updatePurchasable(updateIngredients);
+    }
 
     orderHandler = ()=>{
         this.setState({showModal:true});
@@ -115,21 +117,11 @@ class BurgerBuilder extends React.Component{
             disableInfo[key]= disableInfo[key] <= 0
         }
 
-        let orderSummary = <OrderSummary 
-                ingredients={this.state.ingredients}
-                cancelHandler={this.backDropHandler}
-                continueHandler={this.continueHandler}
-                price={this.state.totalPrice}
-            />
-        if(this.state.loading){
-            orderSummary = <Spinner />
-        }
+        let orderSummary = null;
+        let burger = this.state.error?<p style={{textAlign:"center"}}>Ingredients can't be loaded</p> :<Spinner />;
 
-        return(
-            <Aux>
-                <Modal show={this.state.showModal} backDrop={this.backDropHandler}>
-                    {orderSummary}
-                </Modal>
+        if(this.state.ingredients){
+            burger =(<Aux>
                 <Burger ingredients= {this.state.ingredients} />
                 <BuildControls 
                     ingredientAdd={this.addIngredientHandler}
@@ -138,6 +130,24 @@ class BurgerBuilder extends React.Component{
                     price={this.state.totalPrice}
                     handler={this.orderHandler}
                     purchasable={this.state.purchasable} />
+            </Aux>
+            );
+            orderSummary = <OrderSummary 
+                ingredients={this.state.ingredients}
+                cancelHandler={this.backDropHandler}
+                continueHandler={this.continueHandler}
+                price={this.state.totalPrice}
+            />
+        }
+        if(this.state.loading){
+            orderSummary = <Spinner />
+        }
+        return(
+            <Aux>
+                <Modal show={this.state.showModal} backDrop={this.backDropHandler}>
+                    {orderSummary}
+                </Modal>
+                {burger}
             </Aux>
         );
     }

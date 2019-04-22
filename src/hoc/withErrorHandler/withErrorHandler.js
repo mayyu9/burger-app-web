@@ -12,7 +12,7 @@ const withErrorHanlder = (WrappedComponent, axios) => {
 
         state={error: null}
 
-        componentDidMount(){
+        componentWillMount(){
             //axios listeners
             // in the request interceptors just clearing the error state, so that it won't hold back any pervious error.
             axios.interceptors.request.use(req => {
