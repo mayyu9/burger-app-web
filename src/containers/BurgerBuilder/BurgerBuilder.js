@@ -84,31 +84,35 @@ class BurgerBuilder extends React.Component{
     }
 
     continueHandler = () =>{
-        //alert('you clicked continue');
-        this.setState({loading: true});
-        const order ={
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer:{
-                name:'Mahendar Singh',
-                address:{
-                    door: 'h.no: 6-162',
-                    street: '502319',
-                    country: 'India',
-                },
-                email: 'test@gmail.com'
-            },
-            deliveryMethod:'fastest',
-        };
-        axios.post('/orders.json', order)
-        .then(response => {
-            this.setState({loading: false, showModal: false});
-            console.log(JSON.stringify(response))
-        })
-        .catch(error => {
-            this.setState({loading: false, showModal: false});
-            console.log(JSON.stringify(error))
-        });
+        
+        // this.setState({loading: true});
+        // const order ={
+        //     ingredients: this.state.ingredients,
+        //     price: this.state.totalPrice,
+        //     customer:{
+        //         name:'Mahendar Singh',
+        //         address:{
+        //             door: 'h.no: 6-162',
+        //             street: '502319',
+        //             country: 'India',
+        //         },
+        //         email: 'test@gmail.com'
+        //     },
+        //     deliveryMethod:'fastest',
+        // };
+        // axios.post('/orders.json', order)
+        // .then(response => {
+        //     this.setState({loading: false, showModal: false});
+        //     console.log(JSON.stringify(response))
+        // })
+        // .catch(error => {
+        //     this.setState({loading: false, showModal: false});
+        //     console.log(JSON.stringify(error))
+        // });
+        
+        //component which gets loaded from Route component, will get some props from the router object.
+        //histroy is one such props. using the push method of history props, we can navigate to a particular route.
+        this.props.history.push('/checkout');
     }
     render(){
         const disableInfo = {...this.state.ingredients};

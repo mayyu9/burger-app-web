@@ -1,0 +1,8 @@
+how to navigate to other page on click of button.
+ans: any component which is loaded using the Route object of the react-router, gets some props from the react router.
+    which can be accesible via props.
+    history is one such method which has data about previous route and it has push method. using the push method we can
+    navigate to any route which is defined.
+    
+    ex: this.props.history.push('/checkout');
+
