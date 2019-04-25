@@ -1,4 +1,4 @@
-how to navigate to other page on click of button.
+Q:how to navigate to other page on click of button.
 ans: any component which is loaded using the Route object of the react-router, gets some props from the react router.
     which can be accesible via props.
     history is one such method which has data about previous route and it has push method. using the push method we can
@@ -6,3 +6,13 @@ ans: any component which is loaded using the Route object of the react-router, g
     
     ex: this.props.history.push('/checkout');
 
+Q: How to pass data in the route?
+Ans: we can pass data in the Route as query params. Refer Burger builder for example.
+    we have to encode the data in the form of query param, along with the url route.
+
+Q: how to extract/fetch data which is passed as query params in route path.
+Ans: the component whee we want to extract, should have access to the Router peops object.
+    in the router object we have this.props.location.search, here query params will be shown.
+    in order to extract the data, we have to use URLSearchParams. now we have to iterate over this using the
+    "for of" loop to extract the data. 
+    ex: refer to checkout.js

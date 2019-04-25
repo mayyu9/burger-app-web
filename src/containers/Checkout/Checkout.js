@@ -10,6 +10,18 @@ class Checkout extends React.Component{
         }
     }
 
+    componentDidMount() {
+        const queryData = new URLSearchParams(this.props.location.search);
+        const ingredients = {};
+
+        //we have to use for of loop to fetch query params data
+        for(let params of queryData.entries()){
+            //['salad' , '1']
+            ingredients[params[0]] = +params[1];
+        }
+
+        this.setState({ingredients:ingredients});
+    }
     onCancelled = () => {
         this.props.history.goBack(); //navigates back to previous screen in the stack.
     }
