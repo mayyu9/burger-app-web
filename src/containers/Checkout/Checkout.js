@@ -9,10 +9,21 @@ class Checkout extends React.Component{
             bacon: 1
         }
     }
+
+    onCancelled = () => {
+        this.props.history.goBack(); //navigates back to previous screen in the stack.
+    }
+
+    onContinued = () => {
+        this.props.history.replace('/checkout/contact-data'); //this replaces the current screen in stack with new screen in stack
+    }
     render(){
         return(
             <div>
-                <CheckoutSummary ingredients={this.state.ingredients} />
+                <CheckoutSummary 
+                    ingredients={this.state.ingredients}
+                    checkoutCancelled={this.onCancelled}
+                    checkoutContinued={this.onContinued} />
             </div>
         )
     }
