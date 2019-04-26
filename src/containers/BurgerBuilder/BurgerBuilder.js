@@ -114,7 +114,7 @@ class BurgerBuilder extends React.Component{
         for(let i in this.state.ingredients){
             queryParams.push(encodeURIComponent(i)+ "="+encodeURIComponent(this.state.ingredients[i]) );
         }
-
+        queryParams.push('price='+ this.state.totalPrice);
         const queryString = queryParams.join('&');
         //component which gets loaded from Route component, will get some props from the router object.
         //histroy is one such props. using the push method of history props, we can navigate to a particular route.
