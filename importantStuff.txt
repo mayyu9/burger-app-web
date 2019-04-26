@@ -33,3 +33,6 @@ Ans: the component which have access where we defined button event handler, in t
             path={ this.props.match.path + '/contact-data'}
             render={() => (<ContactData ingredients={this.state.ingredients} />)}
         />
+
+Q: how to transform an object into an Array.
+Ans: Refer to the Order.js component, there is one way and another way is in Burger.js
