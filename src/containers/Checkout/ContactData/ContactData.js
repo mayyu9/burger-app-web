@@ -4,7 +4,6 @@ import classes from './ContactData.css';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import axios from '../../../axios-orders';
-import { timingSafeEqual } from 'crypto';
 
 class ContactData extends React.Component{
     state={
@@ -20,6 +19,7 @@ class ContactData extends React.Component{
                         required: true,
                     },
                     valid: false,
+                    touched: false,
                 },
                 street: {
                     elementType: 'input',
@@ -32,6 +32,7 @@ class ContactData extends React.Component{
                         required: true,
                     },
                     valid: false,
+                    touched: false,
                 },
                 zipCode: {
                     elementType: 'input',
@@ -46,6 +47,7 @@ class ContactData extends React.Component{
                         maxLength: 5,
                     },
                     valid: false,
+                    touched: false,
                 },
                 country: {
                     elementType: 'input',
@@ -58,6 +60,7 @@ class ContactData extends React.Component{
                         required: true,
                     },
                     valid: false,
+                    touched: false,
                 },
                 email: {
                     elementType: 'input',
@@ -70,6 +73,7 @@ class ContactData extends React.Component{
                         required: true,
                     },
                     valid: false,
+                    touched: false,
                 },
                 deliveryMethod:{
                     elementType: 'select',
@@ -87,17 +91,19 @@ class ContactData extends React.Component{
 
     checkValidity = (value, rules) => {
         let isValid = true;
-        if(rules.required) {
-            isValid = value.trim() !== '' && isValid; 
+        if(rules !== undefined){
+            if(rules.required) {
+                isValid = value.trim() !== '' && isValid; 
+            }
+            if(rules.minLength){
+                isValid = value.length >= rules.minLength && isValid;
+            }
+    
+            if(rules.maxLength){
+                isValid = value.length <= rules.maxLength && isValid;
+            }
+            return isValid;
         }
-        if(rules.minLength){
-            isValid = value.length >= minLength && isValid;
-        }
-
-        if(rules.maxLength){
-            isValid = value.length <= maxLength && isValid;
-        }
-        return isValid;
     }
 
     inputChangeHandler = (event, indentifier)=>{
@@ -106,7 +112,8 @@ class ContactData extends React.Component{
         const updatedOrderForm = {...this.state.orderForm}; //create a copy of form withou mutate
         const updatedformElement = {...updatedOrderForm[indentifier]}; //clones one level deep
         updatedformElement.value = event.target.value;
-        updatedformElement.valid = checkValidity(updatedformElement.value, updatedformElement.validation);
+        updatedformElement.valid = this.checkValidity(updatedformElement.value, updatedformElement.validation);
+        updatedformElement.touched =  true; // this is to keep track of which input element user has touched
         updatedOrderForm[indentifier] = updatedformElement;
         this.setState({orderForm: updatedOrderForm});
     }
@@ -159,6 +166,9 @@ class ContactData extends React.Component{
                             elementType={formElement.config.elementType}
                             elementConfig={formElement.config.elementConfig}
                             value={formElement.config.value}
+                            inValid={!formElement.config.valid}
+                            shouldValidate={formElement.config.validation}
+                            touched={formElement.config.touched}
                             changed={(event) => (this.inputChangeHandler(event, formElement.id))}
                         />
                     ))
