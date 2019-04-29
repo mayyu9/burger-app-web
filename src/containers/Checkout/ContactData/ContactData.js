@@ -2,15 +2,62 @@ import React from 'react';
 import Button from '../../../components/UI/Button/Button';
 import classes from './ContactData.css';
 import Spinner from '../../../components/UI/Spinner/Spinner';
+import Input from '../../../components/UI/Input/Input';
 import axios from '../../../axios-orders';
 
 class ContactData extends React.Component{
     state={
-        name: '',
-        email: '',
-        address: {
-            street: '',
-            postaCode: '',
+        orderForm:{
+                name: {
+                    elementType: 'input',
+                    elementConfig: {
+                        type: 'text',
+                        placeholder: 'Your Name'
+                    },
+                    value: ""
+                },
+                street: {
+                    elementType: 'input',
+                    elementConfig: {
+                        type: 'text',
+                        placeholder: 'Your street'
+                    },
+                    value: ""
+                },
+                zipCode: {
+                    elementType: 'input',
+                    elementConfig: {
+                        type: 'text',
+                        placeholder: 'Zip code'
+                    },
+                    value: ""
+                },
+                country: {
+                    elementType: 'input',
+                    elementConfig: {
+                        type: 'text',
+                        placeholder: 'Your country'
+                    },
+                    value: ""
+                },
+                email: {
+                    elementType: 'input',
+                    elementConfig: {
+                        type: 'email',
+                        placeholder: 'Your E-mail'
+                    },
+                    value: ""
+                },
+                deliveryMethod:{
+                    elementType: 'select',
+                    elementConfig: {
+                       options:[
+                           {value:"fastest", displayValue:"Fastest"},
+                           {value:"cheapest", displayValue:"Cheapest"}
+                        ]
+                    },
+                    value: ""
+                },
         },
         loading: false,
     }
@@ -21,16 +68,6 @@ class ContactData extends React.Component{
         const order ={
             ingredients: this.props.ingredients,
             price: this.props.price,
-            customer:{
-                name:'Thakur Singh',
-                address:{
-                    door: 'h.no: 6-162',
-                    street: '502319',
-                    country: 'India',
-                },
-                email: 'test@gmail.com'
-            },
-            deliveryMethod:'fastest',
         };
         axios.post('/orders.json', order)
         .then(response => {
@@ -45,12 +82,30 @@ class ContactData extends React.Component{
         
     }
     render(){
+
+        //convert state object into array
+
+        const formElementsArray = [];
+
+        for(let key in this.state.orderForm){
+            formElementsArray.push({
+                id:key,
+                config:this.state.orderForm[key]
+            })
+        }
+
         let form = (
             <form>
-                <input type="text" name="name" placeholder="Your Name" />
-                <input type="text" name="email" placeholder="Your email" />
-                <input type="text" name="street" placeholder="Your street" />
-                <input type="text" name="postal" placeholder="Yout postal" />
+                {
+                    formElementsArray.map( formElement => (
+                        <Input
+                            key={formElement.id}
+                            elementType={formElement.config.elementType}
+                            elementConfig={formElement.config.elementConfig}
+                            value={formElement.config.value}
+                        />
+                    ))
+                }
                 <Button  
                     btnType="Success"
                     clicked={this.orderHandler}>ORDER</Button>
