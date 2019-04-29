@@ -83,9 +83,12 @@ class ContactData extends React.Component{
                            {value:"cheapest", displayValue:"Cheapest"}
                         ]
                     },
-                    value: ""
+                    value: "",
+                    validation:{},
+                    valid: true,
                 },
         },
+        validForm: false,
         loading: false,
     }
 
@@ -109,13 +112,19 @@ class ContactData extends React.Component{
     inputChangeHandler = (event, indentifier)=>{
         //console.log(event.target.value);
 
-        const updatedOrderForm = {...this.state.orderForm}; //create a copy of form withou mutate
+        const updatedOrderForm = {...this.state.orderForm}; //create a copy of form without mutate
         const updatedformElement = {...updatedOrderForm[indentifier]}; //clones one level deep
         updatedformElement.value = event.target.value;
         updatedformElement.valid = this.checkValidity(updatedformElement.value, updatedformElement.validation);
         updatedformElement.touched =  true; // this is to keep track of which input element user has touched
         updatedOrderForm[indentifier] = updatedformElement;
-        this.setState({orderForm: updatedOrderForm});
+
+        let isValidForm = true;
+
+        for(let indentifier in updatedOrderForm){
+            isValidForm = updatedOrderForm[indentifier].valid && isValidForm
+        }
+        this.setState({orderForm: updatedOrderForm, validForm:isValidForm});
     }
 
     orderHandler = (event) =>{
@@ -175,6 +184,7 @@ class ContactData extends React.Component{
                 }
                 <Button  
                     btnType="Success"
+                    disabled ={ !this.state.validForm}
                     clicked={this.orderHandler}>ORDER</Button>
             </form>
         );
