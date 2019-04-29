@@ -4,6 +4,7 @@ import classes from './ContactData.css';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import axios from '../../../axios-orders';
+import { timingSafeEqual } from 'crypto';
 
 class ContactData extends React.Component{
     state={
@@ -14,7 +15,11 @@ class ContactData extends React.Component{
                         type: 'text',
                         placeholder: 'Your Name'
                     },
-                    value: ""
+                    value: "",
+                    validation: {
+                        required: true,
+                    },
+                    valid: false,
                 },
                 street: {
                     elementType: 'input',
@@ -22,7 +27,11 @@ class ContactData extends React.Component{
                         type: 'text',
                         placeholder: 'Your street'
                     },
-                    value: ""
+                    value: "",
+                    validation: {
+                        required: true,
+                    },
+                    valid: false,
                 },
                 zipCode: {
                     elementType: 'input',
@@ -30,7 +39,13 @@ class ContactData extends React.Component{
                         type: 'text',
                         placeholder: 'Zip code'
                     },
-                    value: ""
+                    value: "",
+                    validation: {
+                        required: true,
+                        minLength: 5,
+                        maxLength: 5,
+                    },
+                    valid: false,
                 },
                 country: {
                     elementType: 'input',
@@ -38,7 +53,11 @@ class ContactData extends React.Component{
                         type: 'text',
                         placeholder: 'Your country'
                     },
-                    value: ""
+                    value: "",
+                    validation: {
+                        required: true,
+                    },
+                    valid: false,
                 },
                 email: {
                     elementType: 'input',
@@ -46,7 +65,11 @@ class ContactData extends React.Component{
                         type: 'email',
                         placeholder: 'Your E-mail'
                     },
-                    value: ""
+                    value: "",
+                    validation: {
+                        required: true,
+                    },
+                    valid: false,
                 },
                 deliveryMethod:{
                     elementType: 'select',
@@ -62,12 +85,28 @@ class ContactData extends React.Component{
         loading: false,
     }
 
+    checkValidity = (value, rules) => {
+        let isValid = true;
+        if(rules.required) {
+            isValid = value.trim() !== '' && isValid; 
+        }
+        if(rules.minLength){
+            isValid = value.length >= minLength && isValid;
+        }
+
+        if(rules.maxLength){
+            isValid = value.length <= maxLength && isValid;
+        }
+        return isValid;
+    }
+
     inputChangeHandler = (event, indentifier)=>{
         //console.log(event.target.value);
 
         const updatedOrderForm = {...this.state.orderForm}; //create a copy of form withou mutate
         const updatedformElement = {...updatedOrderForm[indentifier]}; //clones one level deep
         updatedformElement.value = event.target.value;
+        updatedformElement.valid = checkValidity(updatedformElement.value, updatedformElement.validation);
         updatedOrderForm[indentifier] = updatedformElement;
         this.setState({orderForm: updatedOrderForm});
     }
