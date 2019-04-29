@@ -62,6 +62,16 @@ class ContactData extends React.Component{
         loading: false,
     }
 
+    inputChangeHandler = (event, indentifier)=>{
+        //console.log(event.target.value);
+
+        const updatedOrderForm = {...this.state.orderForm}; //create a copy of form withou mutate
+        const updatedformElement = {...updatedOrderForm[indentifier]}; //clones one level deep
+        updatedformElement.value = event.target.value;
+        updatedOrderForm[indentifier] = updatedformElement;
+        this.setState({orderForm: updatedOrderForm});
+    }
+
     orderHandler = (event) =>{
         event.preventDefault(); // prevent default behaviour of submitting the form.
         this.setState({loading: true});
@@ -103,6 +113,7 @@ class ContactData extends React.Component{
                             elementType={formElement.config.elementType}
                             elementConfig={formElement.config.elementConfig}
                             value={formElement.config.value}
+                            changed={(event) => (this.inputChangeHandler(event, formElement.id))}
                         />
                     ))
                 }
