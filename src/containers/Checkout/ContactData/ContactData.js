@@ -75,9 +75,16 @@ class ContactData extends React.Component{
     orderHandler = (event) =>{
         event.preventDefault(); // prevent default behaviour of submitting the form.
         this.setState({loading: true});
+
+        const formData = {};
+
+        for(let indentifier in this.state.orderForm){
+            formData[indentifier] = this.state.orderForm[indentifier].value;
+        }
         const order ={
             ingredients: this.props.ingredients,
             price: this.props.price,
+            orderDate: formData,
         };
         axios.post('/orders.json', order)
         .then(response => {
@@ -105,7 +112,7 @@ class ContactData extends React.Component{
         }
 
         let form = (
-            <form>
+            <form onSubmit={this.orderHandler}>
                 {
                     formElementsArray.map( formElement => (
                         <Input
