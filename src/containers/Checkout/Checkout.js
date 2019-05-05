@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route} from 'react-router-dom';
+import {Route, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 import ContactData from '../Checkout/ContactData/ContactData';
@@ -35,31 +35,37 @@ class Checkout extends React.Component{
         this.props.history.replace('/checkout/contact-data'); //this replaces the current screen in stack with new screen in stack
     }
     render(){
-        return(
-            <div>
-                <CheckoutSummary 
-                    ingredients={this.props.ingredients}
-                    checkoutCancelled={this.onCancelled}
-                    checkoutContinued={this.onContinued} />
-                {/* this checkout code is one way to pass data to a component where you don't have access to router object
-                    but that component need those props. */}
-                {/* <Route 
-                    path={ this.props.match.path + '/contact-data'}
-                    render={(props) => (<ContactData ingredients={this.props.ingredients} price={this.props.totalPrice} {...props} />)}
-                /> */}
-
-                <Route 
-                    path={ this.props.match.path + '/contact-data'}
-                    component ={ContactData}
-                />
-            </div>
-        )
+        let summary = (
+            <Redirect to="/" />
+        );
+        if(this.props.ingredients){
+            summary = (
+                <div>
+                    <CheckoutSummary 
+                        ingredients={this.props.ingredients}
+                        checkoutCancelled={this.onCancelled}
+                        checkoutContinued={this.onContinued} />
+                    {/* this checkout code is one way to pass data to a component where you don't have access to router object
+                        but that component need those props. */}
+                    {/* <Route 
+                        path={ this.props.match.path + '/contact-data'}
+                        render={(props) => (<ContactData ingredients={this.props.ingredients} price={this.props.totalPrice} {...props} />)}
+                    /> */}
+    
+                    <Route 
+                        path={ this.props.match.path + '/contact-data'}
+                        component ={ContactData}
+                    />
+                </div>
+            )
+        }
+        return summary;
     }
 }
 
 const mapStateToProps = state => {
     return{
-        ingredients: state.ingredients
+        ingredients: state.bugerBuilder.ingredients
     }
 }
 

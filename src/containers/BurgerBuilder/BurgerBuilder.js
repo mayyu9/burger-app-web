@@ -9,7 +9,9 @@ import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import axios from '../../axios-orders';
-import * as actionTypes from '../../constants/constants'
+import {addIngredients, removeIngredients, initIngredients} from '../../actions/BurgerBuilderActions';
+
+//import * as actionTypes from '../../constants/constants'
 
 // const INGREDIENTS_PRICE = { 
 //     salad: 20,
@@ -22,14 +24,12 @@ class BurgerBuilder extends React.Component{
     state = {
         //purchasable: false,
         showModal:false,
-        loading: false,
-        error: false,
+        // loading: false,
+        // error: false,
      }
 
     componentDidMount(){
-        // axios.get('https://my-burger-app-83f21.firebaseio.com/ingredients.json')
-        // .then(res => this.setState({ingredients: res.data}))
-        // .catch(error => this.setState({error: true}))
+        this.props.fetchIngredients();
     }
 
     updatePurchasable = (ingredients) => {
@@ -78,7 +78,7 @@ class BurgerBuilder extends React.Component{
         }
 
         let orderSummary = null;
-        let burger = this.state.error?<p style={{textAlign:"center"}}>Ingredients can't be loaded</p> :<Spinner />;
+        let burger = this.props.error?<p style={{textAlign:"center"}}>Ingredients can't be loaded</p> :<Spinner />;
 
         if(this.props.ings){
             burger =(<Aux>
@@ -99,9 +99,9 @@ class BurgerBuilder extends React.Component{
                 price={this.props.totalPrice}
             />
         }
-        if(this.state.loading){
-            orderSummary = <Spinner />
-        }
+        // if(this.state.loading){
+        //     orderSummary = <Spinner />
+        // }
         return(
             <Aux>
                 <Modal show={this.state.showModal} backDrop={this.backDropHandler}>
@@ -115,15 +115,17 @@ class BurgerBuilder extends React.Component{
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients,
-        totalPrice: state.totalPrice,
+        ings: state.bugerBuilder.ingredients,
+        totalPrice: state.bugerBuilder.totalPrice,
+        error: state.bugerBuilder.error
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onIngredientAdded: (ingName) => dispatch({type: actionTypes.ADD_INGREDIENT, ingredientName: ingName }),
-        onRemovedIngredient: (ingName) => dispatch({type: actionTypes.REMOVE_INGREDIENT, ingredientName: ingName })
+        onIngredientAdded: (ingName) => dispatch(addIngredients(ingName)),
+        onRemovedIngredient: (ingName) => dispatch(removeIngredients(ingName)),
+        fetchIngredients: () => dispatch(initIngredients())
     }
 }
 export default connect(

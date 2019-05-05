@@ -5,6 +5,8 @@ import classes from './ContactData.css';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import axios from '../../../axios-orders';
+import {purchaseBurger} from '../../../actions/OrderAction';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 
 class ContactData extends React.Component{
     state={
@@ -84,7 +86,7 @@ class ContactData extends React.Component{
                            {value:"cheapest", displayValue:"Cheapest"}
                         ]
                     },
-                    value: "",
+                    value: "fastest",
                     validation:{},
                     valid: true,
                 },
@@ -130,7 +132,7 @@ class ContactData extends React.Component{
 
     orderHandler = (event) =>{
         event.preventDefault(); // prevent default behaviour of submitting the form.
-        this.setState({loading: true});
+        //this.setState({loading: true});
 
         const formData = {};
 
@@ -142,16 +144,18 @@ class ContactData extends React.Component{
             price: this.props.price,
             orderDate: formData,
         };
-        axios.post('/orders.json', order)
-        .then(response => {
-            this.setState({loading: false});
-            this.props.history.push('/');
-            //console.log(JSON.stringify(response))
-        })
-        .catch(error => {
-            this.setState({loading: false});
-            //console.log(JSON.stringify(error))
-        });
+
+        this.props.onPurchaseStart(order);
+        // axios.post('/orders.json', order)
+        // .then(response => {
+        //     this.setState({loading: false});
+        //     this.props.history.push('/');
+        //     //console.log(JSON.stringify(response))
+        // })
+        // .catch(error => {
+        //     this.setState({loading: false});
+        //     //console.log(JSON.stringify(error))
+        // });
         
     }
     render(){
@@ -190,7 +194,7 @@ class ContactData extends React.Component{
             </form>
         );
 
-        if(this.state.loading){
+        if(this.props.loading){
             form = <Spinner />
         }
         return(
@@ -204,8 +208,18 @@ class ContactData extends React.Component{
 
 const mapStateToProps = state => {
     return{
-        ingredients: state.ingredients,
-        price: state.totalPrice
+        ingredients: state.bugerBuilder.ingredients,
+        price: state.bugerBuilder.totalPrice,
+        loading: state.order.loading
     }
 }
-export default connect(mapStateToProps)(ContactData);
+
+const mapDispatchToProps = dispatch => {
+    return{
+        onPurchaseStart: (order) => dispatch(purchaseBurger(order))
+    }
+}
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+    )(withErrorHandler(ContactData, axios));
