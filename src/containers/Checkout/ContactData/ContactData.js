@@ -161,7 +161,6 @@ class ContactData extends React.Component{
     render(){
 
         //convert state object into array
-
         const formElementsArray = [];
 
         for(let key in this.state.orderForm){

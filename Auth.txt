@@ -1,0 +1,14 @@
+authentication via firebase:
+
+1) enable authentication in firebase console via email.
+2) whenever we make request from the UI, we have to hit below API and pass required data.
+
+rest API endpoint for signup:
+    https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=[API_KEY]
+    
+    API_KEY: project api key
+
+    refer AuthAction.js for the example.
+
+authentication document:
+https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
