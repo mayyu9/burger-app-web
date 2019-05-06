@@ -10,6 +10,7 @@ import OrderSummary from '../../components/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import axios from '../../axios-orders';
 import {addIngredients, removeIngredients, initIngredients} from '../../actions/BurgerBuilderActions';
+import {purchaseInit} from '../../actions/OrderAction';
 
 //import * as actionTypes from '../../constants/constants'
 
@@ -68,6 +69,7 @@ class BurgerBuilder extends React.Component{
         //     search: '?' +queryString
         // });
 
+        this.props.onInitPurchase(); // redirect to home page after the purchase is successful. this action allows us to fetch data required for redirecting
         this.props.history.push('/checkout');
     }
     render(){
@@ -125,7 +127,8 @@ const mapDispatchToProps = dispatch => {
     return {
         onIngredientAdded: (ingName) => dispatch(addIngredients(ingName)),
         onRemovedIngredient: (ingName) => dispatch(removeIngredients(ingName)),
-        fetchIngredients: () => dispatch(initIngredients())
+        fetchIngredients: () => dispatch(initIngredients()),
+        onInitPurchase: () => dispatch(purchaseInit()),
     }
 }
 export default connect(

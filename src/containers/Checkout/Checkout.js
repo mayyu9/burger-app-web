@@ -39,8 +39,10 @@ class Checkout extends React.Component{
             <Redirect to="/" />
         );
         if(this.props.ingredients){
+            const purchasedRedirect = this.props.purchased? <Redirect to="/" />: null ;
             summary = (
                 <div>
+                    {purchasedRedirect}
                     <CheckoutSummary 
                         ingredients={this.props.ingredients}
                         checkoutCancelled={this.onCancelled}
@@ -65,7 +67,8 @@ class Checkout extends React.Component{
 
 const mapStateToProps = state => {
     return{
-        ingredients: state.bugerBuilder.ingredients
+        ingredients: state.bugerBuilder.ingredients,
+        purchased: state.order.purchased
     }
 }
 
