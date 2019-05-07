@@ -28,7 +28,9 @@ export const authInit = (email, pwd) => {
             returnSecureToken:true
         };
         dispatch(authStart());
-        axios.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyA9lNRGYqSAvgulZll-i44OKZSh-8rKzhk', authData)
+
+        //api_key= AIzaSyA9lNRGYqSAvgulZll-i44OKZSh-8rKzhk
+        axios.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=API_KEY', authData)
             .then(res => {
                 console.log('response: '+res);
                 dispatch(authSuccess(res.data))
