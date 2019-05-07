@@ -45,8 +45,10 @@ export const authInit = (email, pwd, isSignup) => {
         dispatch(authStart());
         //url for signup
         let url= 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=api_key';
+        //let url= 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyA9lNRGYqSAvgulZll-i44OKZSh-8rKzhk';
 
         if(!isSignup){
+            //url= 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyA9lNRGYqSAvgulZll-i44OKZSh-8rKzhk';
             url= 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=api_key';
         }
 
