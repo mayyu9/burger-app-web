@@ -9,18 +9,18 @@ import {fetchOrderInit} from '../../actions/OrderAction';
 /* this component is for showing the orders from the firebase database */
 class Orders extends React.Component{
     componentDidMount(){
-        this.props.onInitOrder(this.props.token);
+        this.props.onInitOrder(this.props.token, this.props.userId);
     }
     render(){
         let orders = <Spinner />;
         if(!this.props.loading){
-            orders = this.props.myOrders.map(order =>{
-                return (<Order 
+            orders = this.props.myOrders.map(order =>(
+                <Order 
                 key={order.id}
                 ingredients = {order.ingredients}
                 price= {order.price} 
-            />)
-            })
+            />
+            ) )
         }
         return(
             <div> 
@@ -42,12 +42,13 @@ const mapStateToProps = state => {
         loading: state.order.loading,
         myOrders: state.order.orders,
         token: state.auth.token,
+        userId: state.auth.userId,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitOrder: (token) => dispatch(fetchOrderInit(token))
+        onInitOrder: (token, userId) => dispatch(fetchOrderInit(token, userId))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Orders, axios)); 
