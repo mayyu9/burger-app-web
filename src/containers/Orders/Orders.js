@@ -12,19 +12,19 @@ class Orders extends React.Component{
         this.props.onInitOrder(this.props.token);
     }
     render(){
-        let order = <Spinner />;
+        let orders = <Spinner />;
         if(!this.props.loading){
-            order = this.props.myOrders.map(order =>
-                <Order 
-                    key={order.id}
-                    ingredients = {order.ingredients}
-                    price= {order.price} 
-                />
-                )
+            orders = this.props.myOrders.map(order =>{
+                return (<Order 
+                key={order.id}
+                ingredients = {order.ingredients}
+                price= {order.price} 
+            />)
+            })
         }
         return(
             <div> 
-                {order}
+                {orders}
                 {/* {this.state.myOrders.map(order =>
                     <Order 
                         key={order.id}

@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './Order.css';
 
-const Order = (props) => { 
+const Order = (props) => {
     const ingredients = [];
 
     //trandforming a object into array.
@@ -13,7 +13,6 @@ const Order = (props) => {
     }
 
     const ingredientsOutput = ingredients.map(ing => {
-        console.log(ing.name)
         return <span 
                 key={ing.name}
                 style={

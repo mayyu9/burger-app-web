@@ -43,7 +43,12 @@ class BurgerBuilder extends React.Component{
     }
 
     orderHandler = ()=>{
-        this.setState({showModal:true});
+        if(this.props.isAuth){
+            this.setState({showModal:true});
+        }else{
+            this.props.history.push('/auth');
+        }
+        
     }
 
     backDropHandler = () => {
@@ -91,6 +96,7 @@ class BurgerBuilder extends React.Component{
                     disabled={disableInfo}
                     price={this.props.totalPrice}
                     handler={this.orderHandler}
+                    isAuth={this.props.isAuth}
                     purchasable={this.updatePurchasable(this.props.ings)} />
             </Aux>
             );
@@ -119,7 +125,8 @@ const mapStateToProps = state => {
     return {
         ings: state.bugerBuilder.ingredients,
         totalPrice: state.bugerBuilder.totalPrice,
-        error: state.bugerBuilder.error
+        error: state.bugerBuilder.error,
+        isAuth: state.auth.token,
     }
 };
 

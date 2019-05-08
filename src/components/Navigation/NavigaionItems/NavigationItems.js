@@ -8,9 +8,9 @@ const NavigationItems = (props) =>(
             link='/' exact>
             Bruger Builder
         </NavigationItem>
-        <NavigationItem link='/orders'>
+        { props.isAuth ?<NavigationItem link='/orders'>
             Orders
-        </NavigationItem>
+        </NavigationItem> : null }
         { !props.isAuth ?
             <NavigationItem link='/auth'>
             Authenticate
