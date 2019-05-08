@@ -5,7 +5,7 @@ import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import classes from './Auth.css';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import {authInit} from '../../actions/AuthAction';
+import {authInit, setAuthRedirect} from '../../actions/AuthAction';
 
 class Auth extends React.Component{
     state = {
@@ -100,6 +100,14 @@ class Auth extends React.Component{
         })
     }
 
+    componentDidMount(){
+        if(!this.props.buildingBurger &&
+            this.props.authRedirectPath !== '/')
+            {
+                this.props.onSetAuthRedirectPath();
+            }        
+    }
+
     render(){
         //convert state object into array
         const formElementsArray = [];
@@ -135,7 +143,9 @@ class Auth extends React.Component{
 
         let authRedirect = null;
         if(this.props.isAuthenticated){
-            authRedirect = <Redirect to='/' />
+            //user should be navigated to checkout if he started building the burger
+            // otherwise should be navigated to root path.
+            authRedirect = <Redirect to={this.props.authRedirectPath} />
         }
         return(
             <div className={classes.Auth}>
@@ -161,11 +171,14 @@ const mapStateToProps = state => {
         loading: state.auth.loading,
         error: state.auth.error,
         isAuthenticated: state.auth.token !== null,
+        authRedirectPath: state.auth.authRedirect,
+        buildingBurger: state.bugerBuilder.building
     }
 }
 const mapDispatchToProps = dispatch => {
     return{
-        onAuthInit: (email, pwd, isSignup) => dispatch(authInit(email, pwd, isSignup))
+        onAuthInit: (email, pwd, isSignup) => dispatch(authInit(email, pwd, isSignup)),
+        onSetAuthRedirectPath: () => dispatch(setAuthRedirect('/'))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);

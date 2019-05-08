@@ -11,6 +11,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import axios from '../../axios-orders';
 import {addIngredients, removeIngredients, initIngredients} from '../../actions/BurgerBuilderActions';
 import {purchaseInit} from '../../actions/OrderAction';
+import {setAuthRedirect} from '../../actions/AuthAction';
 
 //import * as actionTypes from '../../constants/constants'
 
@@ -46,6 +47,11 @@ class BurgerBuilder extends React.Component{
         if(this.props.isAuth){
             this.setState({showModal:true});
         }else{
+            //executing the setAuthRedirectpath action with checkout as paramter.
+            //so that we set the path to /checkout in auth reducer.
+            //hence when we authenticate after building the burger, we will be directed to checkout page.
+            //there we are getting ingredients data via redux.
+            this.props.onSetAuthRedirectPath('/checkout');
             this.props.history.push('/auth');
         }
         
@@ -136,6 +142,7 @@ const mapDispatchToProps = dispatch => {
         onRemovedIngredient: (ingName) => dispatch(removeIngredients(ingName)),
         fetchIngredients: () => dispatch(initIngredients()),
         onInitPurchase: () => dispatch(purchaseInit()),
+        onSetAuthRedirectPath: (path) => dispatch(setAuthRedirect(path)),
     }
 }
 export default connect(
