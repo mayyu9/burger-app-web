@@ -19,8 +19,13 @@ describe('Navigation Items', () => {
     });
 
     it('should render three navigation items if authenticated', () =>{
-
         wrapper.setProps({isAuth: true});
         expect(wrapper.find(NavigationItem)).toHaveLength(3);
+    });
+
+    //contains method allows us to check if a particular element got rendered or not 
+    it('should contain logout link if authenticated', () =>{
+        wrapper.setProps({isAuth: true});
+        expect(wrapper.contains(<NavigationItem link='/logout'>Logout</NavigationItem>)).toEqual(true);
     });
 })
