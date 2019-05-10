@@ -13,16 +13,9 @@ import {addIngredients, removeIngredients, initIngredients} from '../../actions/
 import {purchaseInit} from '../../actions/OrderAction';
 import {setAuthRedirect} from '../../actions/AuthAction';
 
-//import * as actionTypes from '../../constants/constants'
-
-// const INGREDIENTS_PRICE = { 
-//     salad: 20,
-//     meat: 80,
-//     cheese: 30,
-//     bacon: 25,
-// };
-
-class BurgerBuilder extends React.Component{
+//adding export here will help us in testing, because it will export the class component as named export
+// it will detach it from the redux environment for testing purpose.
+export class BurgerBuilder extends React.Component{
     state = {
         //purchasable: false,
         showModal:false,
