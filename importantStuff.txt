@@ -1,0 +1,39 @@
+Q:how to navigate to other page on click of button.
+ans: any component which is loaded using the BrowserRouter object of the react-router, gets some props from the react router.
+    which can be accesible via props.
+    history is one such method which has data about previous route and it has push method. using the push method we can
+    navigate to any route which is defined.
+    
+    ex: this.props.history.push('/checkout');
+
+Q: How to pass data in the route?
+Ans: we can pass data in the Route as query params. Refer Burger builder for example.
+    we have to encode the data in the form of query param, along with the url route.
+
+Q: how to extract/fetch data which is passed as query params in route path.
+Ans: the component where we want to extract, should have access to the Router peops object.
+    in the router object we have this.props.location.search, here query params will be shown.
+    in order to extract the data, we have to use URLSearchParams. now we have to iterate over this using the
+    "for of" loop to extract the data. 
+    ex: refer to checkout.js
+
+Q: how to render a new page or a component on click of a button?
+Ans: the component where button click is handled, in that button event handler use the router object, history.replace('route path')
+    ex: this.props.history.replace('/path')-> refer checkout.js continue handler.
+    now under render method, define a Route component and inside that add render and the component which needs to be render.
+    ex: <Route 
+            path={ this.props.match.path + '/contact-data'}
+            render={() => (<ContactData ingredients={this.state.ingredients} />)}
+        />
+
+Q: how to pass the data for a component which gets render on click of button and component doesn't have access to Router object
+Ans: the component which have access where we defined button event handler, in that file define Route and render method for the 
+    component and pass data as props.
+    ex: <Route 
+            path={ this.props.match.path + '/contact-data'}
+            render={() => (<ContactData ingredients={this.state.ingredients} />)}
+        />
+
+Q: how to transform an object into an Array.
+Ans: Refer to the Order.js component, there is one way and another way is in Burger.js
+

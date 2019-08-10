@@ -1,0 +1,13 @@
+testing code examples
+components:
+    refer to navigationItems component, here there are 2,3 method utilisations example.
+
+containers: 
+    refer BurgerBuilder container, here we have tested the buger loading buildcontrols.
+    simulation of click events is more complicated, hence we need to test only what we need.
+
+    Note: here inorder to detach the containers from redux. we export it as a named export, that way we can omit the 
+    redux connect functionality.
+
+reducers:
+    refer Auth reducer to check the testing for the reducer.
