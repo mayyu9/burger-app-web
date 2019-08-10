@@ -36,3 +36,4 @@ Ans: the component which have access where we defined button event handler, in t
 
 Q: how to transform an object into an Array.
 Ans: Refer to the Order.js component, there is one way and another way is in Burger.js
+
